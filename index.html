@@ -1,0 +1,262 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>PRIMERKA — примерка</title>
+<style>
+:root{
+  --bg:#f6f5f2; --panel:#ffffff; --ink:#1d1d1f; --muted:#6b6b70; --line:#e4e2dc; --accent:#2f5d50; --accent-ink:#fff;
+  --tight:#c2453b; --tight-bg:#fbe9e7; --good:#2e7d4f; --good-bg:#e6f4ea; --loose:#a66b00; --loose-bg:#fdf3dc;
+}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--bg);color:var(--ink);font:15px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif}
+.app{display:grid;grid-template-columns:minmax(0,1fr) 400px;height:100vh}
+.stage{position:relative;min-height:0}
+model-viewer{width:100%;height:100%;--poster-color:transparent;background:radial-gradient(ellipse at 50% 40%,#fff 0,#ecebe6 70%)}
+.badge{position:absolute;left:16px;top:16px;background:rgba(255,255,255,.92);border:1px solid var(--line);border-radius:12px;padding:10px 14px;max-width:min(360px,calc(100% - 32px))}
+.badge b{display:block;font-size:16px}
+.badge span{color:var(--muted);font-size:13px}
+.panel{background:var(--panel);border-left:1px solid var(--line);overflow:auto;padding:20px 20px 40px}
+h1{font-size:20px;margin:0 0 2px}
+.slogan{color:var(--muted);margin:0 0 16px;font-size:13px}
+.step{border-top:1px solid var(--line);padding:16px 0}
+.step h2{font-size:15px;margin:0 0 10px;display:flex;gap:8px;align-items:center}
+.num{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;background:var(--accent);color:var(--accent-ink);font-size:12px}
+.step.locked{opacity:.45;pointer-events:none}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted)}
+input[type=number]{font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:8px;width:100%;color:var(--ink)}
+.btn{font:inherit;border:0;border-radius:10px;padding:10px 14px;background:var(--accent);color:var(--accent-ink);cursor:pointer;width:100%;margin-top:12px}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--accent)}
+.note{color:var(--muted);font-size:13px;margin:6px 0 0}
+table{width:100%;border-collapse:collapse;font-size:13px;margin-top:8px}
+th,td{text-align:right;padding:4px 6px;border-bottom:1px solid var(--line)}
+th:first-child,td:first-child{text-align:left}
+.cat-title{font-size:13px;color:var(--muted);margin:10px 0 6px}
+.cards{display:grid;grid-template-columns:repeat(auto-fill,minmax(104px,1fr));gap:8px}
+.card{border:1px solid var(--line);border-radius:10px;padding:8px;cursor:pointer;background:#fff;text-align:left;font:inherit}
+.card[aria-pressed=true]{border-color:var(--accent);box-shadow:0 0 0 2px var(--accent) inset}
+.sw{height:44px;border-radius:6px;margin-bottom:6px;background-size:cover;border:1px solid rgba(0,0,0,.06)}
+.card b{display:block;font-size:13px}
+.card span{font-size:12px;color:var(--muted)}
+.item{border:1px solid var(--line);border-radius:12px;padding:12px;margin-top:10px}
+.item .top{display:flex;justify-content:space-between;align-items:center;gap:8px}
+.seg{display:flex;gap:6px;margin:10px 0}
+.seg button{flex:1;font:inherit;border:1px solid var(--line);border-radius:8px;background:#fff;padding:6px 0;cursor:pointer;position:relative}
+.seg button[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.rec{position:absolute;top:-8px;right:-4px;background:var(--accent);color:#fff;font-size:10px;border-radius:6px;padding:0 4px}
+.zones{list-style:none;padding:0;margin:0;display:grid;gap:4px}
+.zones li{display:flex;justify-content:space-between;border-radius:6px;padding:4px 8px;font-size:13px}
+.zones li.tight{background:var(--tight-bg);color:var(--tight)}
+.zones li.good{background:var(--good-bg);color:var(--good)}
+.zones li.loose{background:var(--loose-bg);color:var(--loose)}
+.x{font:inherit;font-size:12px;border:0;background:none;color:var(--muted);cursor:pointer;text-decoration:underline}
+.credit{color:var(--muted);font-size:11px;margin-top:20px}
+.err{background:var(--tight-bg);color:var(--tight);padding:10px;border-radius:8px;font-size:13px}
+@media (max-width:860px){
+  .app{grid-template-columns:1fr;grid-template-rows:55vh auto;height:auto}
+  .panel{border-left:0;border-top:1px solid var(--line);padding:16px}
+  .badge{left:8px;top:8px;padding:6px 10px}
+  .badge b{font-size:14px}
+  .badge span{font-size:12px}
+}
+</style>
+</head>
+<body>
+<div class="app">
+  <div class="stage">
+    <model-viewer id="mv" camera-controls touch-action="pan-y" shadow-intensity="0.6" exposure="1.05"
+      camera-orbit="0deg 84deg 4.9m" camera-target="0m 0.9m 0m" field-of-view="30deg" min-camera-orbit="auto auto 1.6m" max-camera-orbit="auto auto 7m"
+      interaction-prompt="none" alt="3D-модель фигуры покупателя"></model-viewer>
+    <div class="badge" id="badge" hidden></div>
+  </div>
+  <aside class="panel" id="panel">
+    <h1>PRIMERKA</h1>
+    <p class="slogan">Шопинг, который любит Ваше время</p>
+
+    <section class="step" id="s1">
+      <h2><span class="num">1</span>Ваши параметры, см</h2>
+      <form id="form" class="grid2">
+        <label class="f">Рост<input type="number" name="height" min="150" max="205" required></label>
+        <label class="f">Обхват груди<input type="number" name="chest" min="75" max="140" required></label>
+        <label class="f">Обхват талии<input type="number" name="waist" min="55" max="130" required></label>
+        <label class="f">Обхват бёдер<input type="number" name="hips" min="75" max="140" required></label>
+        <button class="btn" type="submit" style="grid-column:1/-1">Подобрать мою модель</button>
+      </form>
+    </section>
+
+    <section class="step locked" id="s2">
+      <h2><span class="num">2</span>Ваша модель</h2>
+      <div id="match"><p class="note">Появится после ввода параметров.</p></div>
+    </section>
+
+    <section class="step locked" id="s3">
+      <h2><span class="num">3</span>Каталог магазина</h2>
+      <div id="catalog"></div>
+    </section>
+
+    <section class="step locked" id="s4">
+      <h2><span class="num">4</span>Как сидит</h2>
+      <div id="fit"><p class="note">Выберите вещь в каталоге.</p></div>
+    </section>
+
+    <p class="credit">3D-фигуры и одежда собраны из ассетов MakeHuman (CC0). Просмотр — &lt;model-viewer&gt; (Google, Apache-2.0). Работает без интернета и без сервера.</p>
+  </aside>
+</div>
+
+<script src="models/bundle.js"></script>
+<script src="vendor/model-viewer.js"></script>
+<script type="module">
+'use strict';
+const STORE_KEY='primerka.mv.v1';
+const DATA=window.PRIMERKA;
+const mv=document.getElementById('mv');
+const $=s=>document.querySelector(s);
+
+/* ===== Каталог: один артикул = вещь (лекало) + цвет или принт. Геометрия общая для всех артикулов ===== */
+const CATALOG=[
+  {id:'TSH-WHT', g:'tee',   name:'Футболка белая',      color:'#f1f1ef', tex:null,     price:990},
+  {id:'TSH-BLK', g:'tee',   name:'Футболка чёрная',     color:'#2a2a2c', tex:null,     price:990},
+  {id:'TSH-NVY', g:'tee',   name:'Футболка синяя',      color:'#2c3e66', tex:null,     price:990},
+  {id:'TSH-OLV', g:'tee',   name:'Футболка олива',      color:'#6b6f45', tex:null,     price:990},
+  {id:'TSH-PRT', g:'tee',   name:'Футболка с принтом',  color:'#ffffff', tex:'print',  price:1290},
+  {id:'JNS-IND', g:'jeans', name:'Джинсы индиго',       color:'#ffffff', tex:'print',  price:2990},
+  {id:'JNS-BLK', g:'jeans', name:'Джинсы чёрные',       color:'#3a3a3e', tex:'fabric', price:2990},
+  {id:'JNS-GRY', g:'jeans', name:'Джинсы серые',        color:'#8d9096', tex:'fabric', price:2990},
+  {id:'JNS-SND', g:'jeans', name:'Джинсы песочные',     color:'#c9b48e', tex:'fabric', price:2990},
+];
+const G=DATA.presets.garments, SIZES=DATA.presets.sizes, BODIES=DATA.presets.bodies;
+const ZONES={tee:[['chest','Грудь']], jeans:[['waist','Талия'],['hips','Бёдра']]};
+// Порог «тесно / в самый раз / свободно» по запасу (обхват вещи − обхват тела), см
+const EASE={tee:{chest:[2,14]}, jeans:{waist:[-1,6], hips:[0,10]}};
+const FIT_TXT={tight:'тесно',good:'в самый раз',loose:'свободно'};
+
+let state={profile:null, body:null, wear:{tee:null, jeans:null}, size:{tee:null, jeans:null}};
+try{ const s=JSON.parse(localStorage.getItem(STORE_KEY)||'null'); if(s) state={...state,...s}; }catch(e){}
+const save=()=>{ try{ localStorage.setItem(STORE_KEY,JSON.stringify(state)); }catch(e){} };
+
+/* ===== 2. Выбор заготовки фигуры по замерам ===== */
+// Модель масштабируется под рост, поэтому обхваты заготовки сравниваются с поправкой на масштаб.
+function pickBody(p){
+  let best=null;
+  for(const [key,b] of Object.entries(BODIES)){
+    const m=b.measurements, s=p.height/m.height;
+    const d=Math.hypot(p.chest-m.chest*s, p.waist-m.waist*s, p.hips-m.hips*s);
+    if(!best||d<best.d) best={key,d,s};
+  }
+  return best;
+}
+
+/* ===== Подбор размера по замерам покупателя ===== */
+function evalSize(g,size,p){
+  return ZONES[g].map(([z,label])=>{
+    const ease=G[g].sizes[size][z]-p[z], [lo,hi]=EASE[g][z];
+    return {z,label,ease,fit:ease<lo?'tight':ease>hi?'loose':'good'};
+  });
+}
+function recommend(g,p){
+  const pen={tight:3,loose:1,good:0}; let best=null,bs=Infinity;
+  for(const s of SIZES){
+    const sc=evalSize(g,s,p).reduce((a,z)=>{ const [lo,hi]=EASE[g][z.z]; return a+pen[z.fit]*100+Math.abs(z.ease-(lo+hi)/2); },0);
+    if(sc<bs){bs=sc;best=s;}
+  }
+  return best;
+}
+const sizeOf=g=>state.size[g]||recommend(g,state.profile);
+
+/* ===== Сцена: одна GLB на фигуру, все размеры вещей внутри; показываем нужный материалом (alpha MASK) ===== */
+let textures={}, loadedBody=null, white={};
+function loadBody(key,scale){
+  mv.setAttribute('scale',`${scale} ${scale} ${scale}`);
+  if(loadedBody===key){ applyLook(); return; }
+  loadedBody=null; textures={}; white={};
+  mv.src=DATA.models[key];
+  mv.addEventListener('load',async()=>{
+    for(const t of ['fabric','print']) textures[t]=await mv.createTexture(DATA.textures[t]);
+    for(const m of mv.model.materials) white[m.name]=m.pbrMetallicRoughness.baseColorTexture.texture;
+    loadedBody=key; applyLook();
+  },{once:true});
+}
+function hexRGB(h){ return [1,3,5].map(i=>Math.pow(parseInt(h.slice(i,i+2),16)/255,2.2)); }
+function applyLook(){
+  if(!loadedBody) return;
+  for(const g of ['tee','jeans']){
+    const art=CATALOG.find(a=>a.id===state.wear[g]), sz=art?sizeOf(g):null;
+    for(const s of SIZES){
+      const m=mv.model.getMaterialByName(`${g}_${s}`); if(!m) continue;
+      const on=!!art&&s===sz, pbr=m.pbrMetallicRoughness;
+      if(art){ pbr.baseColorTexture.setTexture(art.tex?textures[art.tex]:white[m.name]); }
+      pbr.setBaseColorFactor([...(art?hexRGB(art.color):[1,1,1]), on?1:0]);
+    }
+  }
+}
+
+/* ===== Интерфейс ===== */
+function unlock(id,on){ $(id).classList.toggle('locked',!on); }
+function renderMatch(){
+  const p=state.profile, b=BODIES[state.body.key], m=b.measurements, s=state.body.s;
+  const row=(l,u,v)=>`<tr><td>${l}</td><td>${u}</td><td>${v.toFixed(0)}</td></tr>`;
+  $('#match').innerHTML=`<p style="margin:0">Подобрана заготовка <b>«${b.name}»</b> из ${Object.keys(BODIES).length}.
+      Масштаб по росту ×${s.toFixed(2)}.</p>
+    <table><thead><tr><th></th><th>Вы</th><th>Модель</th></tr></thead><tbody>
+      ${row('Рост',p.height,m.height*s)}${row('Грудь',p.chest,m.chest*s)}${row('Талия',p.waist,m.waist*s)}${row('Бёдра',p.hips,m.hips*s)}
+    </tbody></table>
+    <p class="note">Выбираем ближайшую фигуру по груди, талии и бёдрам. Размер вещи считается по вашим замерам, а не по модели.</p>`;
+  $('#badge').hidden=false;
+  $('#badge').innerHTML=`<b>Фигура: ${b.name}</b><span>рост ${p.height} см · грудь ${p.chest} · талия ${p.waist} · бёдра ${p.hips}</span>`;
+}
+function swatch(a){
+  if(a.tex==='print') return a.g==='tee'
+    ? `background:linear-gradient(135deg,#2f52a0 0,#2f52a0 60%,#e8743b 60%,#e8743b 70%,#2f52a0 70%)`
+    : `background:repeating-linear-gradient(45deg,#4f6d94 0 3px,#5d7ba3 3px 6px)`;
+  if(a.tex==='fabric') return `background:repeating-linear-gradient(45deg,${a.color} 0 3px,color-mix(in srgb,${a.color} 82%,#fff) 3px 6px)`;
+  return `background:${a.color}`;
+}
+function renderCatalog(){
+  const group=(g,title)=>`<div class="cat-title">${title}</div><div class="cards">${CATALOG.filter(a=>a.g===g).map(a=>
+    `<button class="card" data-art="${a.id}" aria-pressed="${state.wear[g]===a.id}"><div class="sw" style="${swatch(a)}"></div>
+      <b>${a.name}</b><span>${a.id} · ${a.price} ₽</span></button>`).join('')}</div>`;
+  $('#catalog').innerHTML=group('tee','Верх')+group('jeans','Низ');
+  $('#catalog').querySelectorAll('[data-art]').forEach(b=>b.onclick=()=>{
+    const a=CATALOG.find(x=>x.id===b.dataset.art); state.wear[a.g]=state.wear[a.g]===a.id?null:a.id; changed();
+  });
+}
+function renderFit(){
+  const items=['tee','jeans'].filter(g=>state.wear[g]);
+  if(!items.length){ $('#fit').innerHTML='<p class="note">Выберите вещь в каталоге.</p>'; return; }
+  $('#fit').innerHTML=items.map(g=>{
+    const a=CATALOG.find(x=>x.id===state.wear[g]), rec=recommend(g,state.profile), sz=sizeOf(g), zs=evalSize(g,sz,state.profile);
+    return `<div class="item"><div class="top"><b>${a.name}</b><button class="x" data-off="${g}">снять</button></div>
+      <div class="seg">${SIZES.map(s=>`<button data-size="${g}|${s}" aria-pressed="${s===sz}">${s}${s===rec?'<span class="rec">ваш</span>':''}</button>`).join('')}</div>
+      <ul class="zones">${zs.map(z=>`<li class="${z.fit}"><span>${z.label}: ${G[g].sizes[sz][z.z]} см</span><span>запас ${z.ease>0?'+':''}${Math.round(z.ease)} · <b>${FIT_TXT[z.fit]}</b></span></li>`).join('')}</ul>
+      <p class="note">Рекомендуем <b>${rec}</b>${sz!==rec?` — на модели сейчас ${sz}`:''}.</p></div>`;
+  }).join('');
+  $('#fit').querySelectorAll('[data-size]').forEach(b=>b.onclick=()=>{ const [g,s]=b.dataset.size.split('|'); state.size[g]=s; changed(); });
+  $('#fit').querySelectorAll('[data-off]').forEach(b=>b.onclick=()=>{ state.wear[b.dataset.off]=null; changed(); });
+}
+function changed(){ save(); renderCatalog(); renderFit(); applyLook(); }
+
+$('#form').onsubmit=e=>{
+  e.preventDefault();
+  const fd=new FormData(e.target), p={};
+  for(const k of ['height','chest','waist','hips']) p[k]=Number(fd.get(k));
+  state.profile=p; state.size={tee:null,jeans:null};
+  start();
+};
+function start(){
+  const pick=pickBody(state.profile); state.body={key:pick.key,s:pick.s};
+  save(); unlock('#s2',true); unlock('#s3',true); unlock('#s4',true);
+  renderMatch(); renderCatalog(); renderFit(); loadBody(pick.key,pick.s);
+}
+
+if(!DATA){ $('#panel').insertAdjacentHTML('afterbegin','<p class="err">Нет models/bundle.js — запустите python3 tools/build_presets.py</p>'); }
+else{
+  const p=state.profile||{height:178,chest:100,waist:84,hips:100};
+  for(const [k,v] of Object.entries(p)) $('#form').elements[k].value=v;
+  if(state.profile) start(); else loadBody('avg',1);
+}
+</script>
+</body>
+</html>

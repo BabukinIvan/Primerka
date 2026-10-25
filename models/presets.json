@@ -1,0 +1,241 @@
+{
+ "version": 1,
+ "source": "MakeHuman system assets (CC0): base.obj hm08, macrodetails targets, male_casualsuit04",
+ "sizes": [
+  "S",
+  "M",
+  "L",
+  "XL"
+ ],
+ "garments": {
+  "tee": {
+   "name": "Футболка",
+   "sizes": {
+    "S": {
+     "chest": 96
+    },
+    "M": {
+     "chest": 104
+    },
+    "L": {
+     "chest": 112
+    },
+    "XL": {
+     "chest": 120
+    }
+   }
+  },
+  "jeans": {
+   "name": "Джинсы",
+   "sizes": {
+    "S": {
+     "waist": 76,
+     "hips": 94
+    },
+    "M": {
+     "waist": 84,
+     "hips": 102
+    },
+    "L": {
+     "waist": 92,
+     "hips": 110
+    },
+    "XL": {
+     "waist": 100,
+     "hips": 118
+    }
+   }
+  }
+ },
+ "bodies": {
+  "slim": {
+   "name": "Худощавая",
+   "file": "body_slim.glb",
+   "measurements": {
+    "height": 173.0,
+    "chest": 91.6,
+    "waist": 68.1,
+    "hips": 88.8
+   },
+   "garmentFit": {
+    "tee": {
+     "chest": 99.0
+    },
+    "jeans": {
+     "waist": 85.9,
+     "hips": 93.4
+    }
+   },
+   "ease": {
+    "tee": {
+     "S": {
+      "chest": 4.4
+     },
+     "M": {
+      "chest": 12.4
+     },
+     "L": {
+      "chest": 20.4
+     },
+     "XL": {
+      "chest": 28.4
+     }
+    },
+    "jeans": {
+     "S": {
+      "waist": 7.9,
+      "hips": 5.2
+     },
+     "M": {
+      "waist": 15.9,
+      "hips": 13.2
+     },
+     "L": {
+      "waist": 23.9,
+      "hips": 21.2
+     },
+     "XL": {
+      "waist": 31.9,
+      "hips": 29.2
+     }
+    }
+   },
+   "morphs": [
+    [
+     "averagemuscle-minweight",
+     0.6
+    ],
+    [
+     "minmuscle-minweight",
+     0.15
+    ]
+   ]
+  },
+  "avg": {
+   "name": "Средняя",
+   "file": "body_avg.glb",
+   "measurements": {
+    "height": 173.0,
+    "chest": 99.3,
+    "waist": 80.6,
+    "hips": 99.3
+   },
+   "garmentFit": {
+    "tee": {
+     "chest": 109.4
+    },
+    "jeans": {
+     "waist": 91.9,
+     "hips": 103.2
+    }
+   },
+   "ease": {
+    "tee": {
+     "S": {
+      "chest": -3.3
+     },
+     "M": {
+      "chest": 4.7
+     },
+     "L": {
+      "chest": 12.7
+     },
+     "XL": {
+      "chest": 20.7
+     }
+    },
+    "jeans": {
+     "S": {
+      "waist": -4.6,
+      "hips": -5.3
+     },
+     "M": {
+      "waist": 3.4,
+      "hips": 2.7
+     },
+     "L": {
+      "waist": 11.4,
+      "hips": 10.7
+     },
+     "XL": {
+      "waist": 19.4,
+      "hips": 18.7
+     }
+    }
+   },
+   "morphs": [
+    [
+     "averagemuscle-maxweight",
+     0.4
+    ],
+    [
+     "maxmuscle-maxweight",
+     0.2
+    ]
+   ]
+  },
+  "heavy": {
+   "name": "Плотная",
+   "file": "body_heavy.glb",
+   "measurements": {
+    "height": 173.0,
+    "chest": 106.2,
+    "waist": 94.3,
+    "hips": 105.5
+   },
+   "garmentFit": {
+    "tee": {
+     "chest": 116.1
+    },
+    "jeans": {
+     "waist": 106.3,
+     "hips": 111.7
+    }
+   },
+   "ease": {
+    "tee": {
+     "S": {
+      "chest": -10.2
+     },
+     "M": {
+      "chest": -2.2
+     },
+     "L": {
+      "chest": 5.8
+     },
+     "XL": {
+      "chest": 13.8
+     }
+    },
+    "jeans": {
+     "S": {
+      "waist": -18.3,
+      "hips": -11.5
+     },
+     "M": {
+      "waist": -10.3,
+      "hips": -3.5
+     },
+     "L": {
+      "waist": -2.3,
+      "hips": 4.5
+     },
+     "XL": {
+      "waist": 5.7,
+      "hips": 12.5
+     }
+    }
+   },
+   "morphs": [
+    [
+     "averagemuscle-maxweight",
+     0.6
+    ],
+    [
+     "minmuscle-maxweight",
+     0.3
+    ]
+   ]
+  }
+ }
+}
